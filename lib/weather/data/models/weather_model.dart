@@ -11,7 +11,8 @@ class WeatherModel extends Weather {
       super.lon,
       super.wind_speed,
       super.temp,
-      super.humitity);
+      super.humitity,
+      super.feel);
 
   factory WeatherModel.fromJson(Map<String, dynamic> json) {
     return WeatherModel(
@@ -24,6 +25,7 @@ class WeatherModel extends Weather {
         json['coord']['lon'],
         json['wind']['speed'],
         json['main']['temp'],
-        json['main']['humidity']);
+        json['main']['humidity'],
+        json['main']['feels_like']);
   }
 }

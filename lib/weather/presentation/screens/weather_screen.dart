@@ -1,6 +1,7 @@
 // import 'dart:html';
 
 import 'dart:ui';
+import 'package:weather_icons/weather_icons.dart';
 
 import 'package:flutter/material.dart';
 import 'package:weather/core/utils/constants.dart';
@@ -36,6 +37,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
   double speed = 0;
   double temp = 0;
   double temp_c = 0;
+  double feel = 0;
   int humidity = 0;
   String currentCountry = '';
   TextEditingController searchController = TextEditingController();
@@ -79,7 +81,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     BaseWeatherRepository baseWeatherRepository =
         WeatherRepository(baseRemoteDataSource);
     Weather weather =
-        await GetWeatherByCountry(baseWeatherRepository).execute('Egypt');
+        await GetWeatherByCountry(baseWeatherRepository).execute('Germany');
     setState(() {
       cityName = weather.cityName;
       lon = weather.lon;
@@ -89,6 +91,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
       temp_c = temp - 273.15;
       speed = weather.wind_speed;
       humidity = weather.humitity;
+      feel = weather.feel - 273.15;
     });
     print(weather.cityName);
     print(weather.lon);
@@ -154,12 +157,12 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
-                decoration: BoxDecoration(
-                  color: AppColorPalette2.preprimarycolor2.withOpacity(0.1),
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
+                // decoration: BoxDecoration(
+                //   color: AppColorPalette2.preprimarycolor2.withOpacity(0.1),
+                //   borderRadius: const BorderRadius.all(
+                //     Radius.circular(20),
+                //   ),
+                // ),
                 // ignore: sort_child_properties_last
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -202,10 +205,45 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 margin:
                     const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
                 decoration: BoxDecoration(
-                  color: AppColorPalette2.primarcolor.withOpacity(0.2),
+                  color: AppColorPalette2.preprimarycolor2.withOpacity(0.1),
                   borderRadius: const BorderRadius.all(
                     Radius.circular(20),
                   ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              temp_c.toStringAsFixed(2),
+                              style: AppColorPalette2.textstyleInfo,
+                            ),
+                            const BoxedIcon(WeatherIcons.celsius,
+                                color: Colors.white, size: 25),
+                          ],
+                        ),
+                        Text(
+                          'Feels Like ' + feel.toStringAsFixed(2),
+                          style: AppColorPalette2.textstyleTiltle.copyWith(
+                              fontWeight: FontWeight.w100, fontSize: 15),
+                        ),
+                      ],
+                    ),
+                    // const Icon(
+                    //   Icons.sunny,
+                    //   color: Colors.white,
+                    //   size: 70,
+                    // ),
+                    const BoxedIcon(WeatherIcons.sunrise,
+                        color: Colors.white, size: 70),
+                  ],
                 ),
               ),
               Container(
@@ -214,12 +252,12 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 margin:
                     const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-                decoration: BoxDecoration(
-                  color: AppColorPalette2.primarcolor.withOpacity(0.2),
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
+                // decoration: BoxDecoration(
+                //   color: AppColorPalette2.primarcolor.withOpacity(0.2),
+                //   borderRadius: const BorderRadius.all(
+                //     Radius.circular(20),
+                //   ),
+                // ),
                 // ignore: sort_child_properties_last
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -227,11 +265,11 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   children: [
                     Text(
                       main,
-                      style: AppColorPalette2.textstyle
-                          .copyWith(fontSize: 30, fontWeight: FontWeight.w500),
+                      style: AppColorPalette2.textstyleTiltle
+                          .copyWith(fontSize: 40),
                     ),
                     const SizedBox(
-                      height: 5,
+                      height: 15,
                     ),
                   ],
                 ),
@@ -303,35 +341,14 @@ class _WeatherScreenState extends State<WeatherScreen> {
                           height: 6,
                         ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
                               temp_c.toStringAsFixed(2),
                               style: AppColorPalette2.textstyleInfo,
                             ),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  WidgetSpan(
-                                    child: Transform.translate(
-                                        offset: Offset(0.0, -7.0),
-                                        child: RichText(
-                                          // use RichText instead ot Text if you need recognizer on a superscripted text
-                                          text: TextSpan(
-                                            style: AppColorPalette2
-                                                .textstyleTiltle
-                                                .copyWith(fontSize: 10),
-                                            text: "0",
-                                            //style: textStyle,
-                                          ),
-                                        )),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Text(
-                              'C',
-                              style: AppColorPalette2.textstyleTiltle,
-                            ),
+                            const BoxedIcon(WeatherIcons.celsius,
+                                color: Colors.white, size: 25),
                           ],
                         ),
                       ],

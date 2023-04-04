@@ -10,7 +10,8 @@ class Weather {
   final double wind_speed;
   final double temp;
   final int humitity;
+  final double feel;
 
   Weather(this.id, this.cityName, this.main, this.description, this.pressure,
-      this.lat, this.lon, this.wind_speed, this.temp, this.humitity);
+      this.lat, this.lon, this.wind_speed, this.temp, this.humitity, this.feel);
 }
