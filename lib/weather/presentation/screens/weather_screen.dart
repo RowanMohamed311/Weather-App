@@ -27,7 +27,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
 // var address = await Geocoder.local.findAddressesFromCoordinates(coordinates);
 // String yourCityName = address.first.locality
   loc.Location location = loc.Location();
-
+  String search_country = 'egypt';
   String cityName = '';
   double lon = 0;
   double lat = 0;
@@ -48,7 +48,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     getLocationCoordinates();
     Future.delayed(const Duration(milliseconds: 1000));
 
-    getWeather();
+    // getWeather();
   }
 
   Future getLocationCoordinates() async {
@@ -70,6 +70,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
         currentCountry = place.country!;
       });
       print('testplace : ' + place.country.toString());
+      setState(() {
+        search_country = place.country.toString();
+      });
+      getWeather();
     } catch (e) {
       print(e);
       return null;
@@ -80,8 +84,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
     BaseRemoteDataSource baseRemoteDataSource = RemoteDataSource();
     BaseWeatherRepository baseWeatherRepository =
         WeatherRepository(baseRemoteDataSource);
-    Weather weather =
-        await GetWeatherByCountry(baseWeatherRepository).execute('Germany');
+    Weather weather = await GetWeatherByCountry(baseWeatherRepository)
+        .execute(search_country);
     setState(() {
       cityName = weather.cityName;
       lon = weather.lon;
@@ -106,286 +110,295 @@ class _WeatherScreenState extends State<WeatherScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColorPalette2.backgroundcolor,
-        body: Container(
-          child: Column(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: AppColorPalette2.preprimarycolor2.withOpacity(0.1),
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(20),
+        body: SingleChildScrollView(
+          child: Container(
+            child: Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: AppColorPalette2.preprimarycolor2.withOpacity(0.1),
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(20),
+                    ),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: searchController,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Search City....',
+                            hintStyle: TextStyle(
+                                color: AppColorPalette2.preprimarycolor,
+                                fontSize: 16),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            search_country = searchController.text;
+                          });
+                          getWeather();
+                        },
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(40),
+                          ),
+                          child: const Icon(
+                            Icons.search,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: searchController,
-                        style: const TextStyle(color: Colors.white),
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Search City....',
-                          hintStyle: TextStyle(
-                              color: AppColorPalette2.preprimarycolor,
-                              fontSize: 16),
-                        ),
+                Container(
+                  height: 100,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
+                  // decoration: BoxDecoration(
+                  //   color: AppColorPalette2.preprimarycolor2.withOpacity(0.1),
+                  //   borderRadius: const BorderRadius.all(
+                  //     Radius.circular(20),
+                  //   ),
+                  // ),
+                  // ignore: sort_child_properties_last
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        cityName,
+                        style: AppColorPalette2.textstyle.copyWith(
+                            fontSize: 30, fontWeight: FontWeight.w500),
                       ),
-                    ),
-                    GestureDetector(
-                      child: Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(40),
-                        ),
-                        child: const Icon(
-                          Icons.search,
-                          color: Colors.white,
-                        ),
+                      const SizedBox(
+                        height: 5,
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                height: 100,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
-                // decoration: BoxDecoration(
-                //   color: AppColorPalette2.preprimarycolor2.withOpacity(0.1),
-                //   borderRadius: const BorderRadius.all(
-                //     Radius.circular(20),
-                //   ),
-                // ),
-                // ignore: sort_child_properties_last
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      cityName,
-                      style: AppColorPalette2.textstyle
-                          .copyWith(fontSize: 30, fontWeight: FontWeight.w500),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.location_on,
-                          size: 15,
-                          color:
-                              AppColorPalette2.preprimarycolor.withOpacity(0.5),
-                        ),
-                        Text(
-                          ' $lon, $lat',
-                          style: TextStyle(
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.location_on,
+                            size: 15,
                             color: AppColorPalette2.preprimarycolor
                                 .withOpacity(0.5),
                           ),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                height: 140,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-                decoration: BoxDecoration(
-                  color: AppColorPalette2.preprimarycolor2.withOpacity(0.1),
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(20),
+                          Text(
+                            ' $lon, $lat',
+                            style: TextStyle(
+                              color: AppColorPalette2.preprimarycolor
+                                  .withOpacity(0.5),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
                   ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              temp_c.toStringAsFixed(2),
-                              style: AppColorPalette2.textstyleInfo,
-                            ),
-                            const BoxedIcon(WeatherIcons.celsius,
-                                color: Colors.white, size: 25),
-                          ],
-                        ),
-                        Text(
-                          'Feels Like ' + feel.toStringAsFixed(2),
-                          style: AppColorPalette2.textstyleTiltle.copyWith(
-                              fontWeight: FontWeight.w100, fontSize: 15),
-                        ),
-                      ],
+                Container(
+                  height: 140,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                  decoration: BoxDecoration(
+                    color: AppColorPalette2.preprimarycolor2.withOpacity(0.1),
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(20),
                     ),
-                    // const Icon(
-                    //   Icons.sunny,
-                    //   color: Colors.white,
-                    //   size: 70,
-                    // ),
-                    const BoxedIcon(WeatherIcons.sunrise,
-                        color: Colors.white, size: 70),
-                  ],
-                ),
-              ),
-              Container(
-                height: 100,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-                // decoration: BoxDecoration(
-                //   color: AppColorPalette2.primarcolor.withOpacity(0.2),
-                //   borderRadius: const BorderRadius.all(
-                //     Radius.circular(20),
-                //   ),
-                // ),
-                // ignore: sort_child_properties_last
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      main,
-                      style: AppColorPalette2.textstyleTiltle
-                          .copyWith(fontSize: 40),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                width: 370,
-                height: 100,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(22)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColorPalette2.preprimarycolor2,
-                      offset: Offset(0, 1),
-                      blurRadius: 30,
-                      spreadRadius: -20,
-                    ),
-                  ],
-                  gradient: LinearGradient(
-                      colors: [
-                        AppColorPalette2.secondarycolor,
-                        AppColorPalette2.preprimarycolor2,
-                        AppColorPalette2.preprimarycolor2,
-                        AppColorPalette2.primarcolor
-                        //add more colors for gradient
-                      ],
-                      begin: Alignment.topLeft, //begin of the gradient color
-                      end: Alignment.bottomRight, //end of the gradient color
-                      stops: [0, 0.4, 0.6, 0.8] //stops for individual color
-                      //set the stops number equal to numbers of color
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                temp_c.toStringAsFixed(2),
+                                style: AppColorPalette2.textstyleInfo,
+                              ),
+                              const BoxedIcon(WeatherIcons.celsius,
+                                  color: Colors.white, size: 25),
+                            ],
+                          ),
+                          Text(
+                            'Feels Like ' + feel.toStringAsFixed(2),
+                            style: AppColorPalette2.textstyleTiltle.copyWith(
+                                fontWeight: FontWeight.w100, fontSize: 15),
+                          ),
+                        ],
                       ),
+                      // const Icon(
+                      //   Icons.sunny,
+                      //   color: Colors.white,
+                      //   size: 70,
+                      // ),
+                      const BoxedIcon(WeatherIcons.sunrise,
+                          color: Colors.white, size: 70),
+                    ],
+                  ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Wind', style: AppColorPalette2.textstyleTiltle),
-                        const SizedBox(
-                          height: 6,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              '$speed ',
-                              style: AppColorPalette2.textstyleInfo,
-                            ),
-                            Text(
-                              'Km/h',
-                              style: AppColorPalette2.textstyleTiltle,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    VerticalDivider(
-                      width: 20,
-                      thickness: 1,
-                      indent: 20,
-                      endIndent: 20,
-                      color: Colors.white.withOpacity(0.1),
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Temp', style: AppColorPalette2.textstyleTiltle),
-                        const SizedBox(
-                          height: 6,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              temp_c.toStringAsFixed(2),
-                              style: AppColorPalette2.textstyleInfo,
-                            ),
-                            const BoxedIcon(WeatherIcons.celsius,
-                                color: Colors.white, size: 25),
-                          ],
-                        ),
-                      ],
-                    ),
-                    VerticalDivider(
-                      width: 20,
-                      thickness: 1,
-                      indent: 20,
-                      endIndent: 20,
-                      color: Colors.white.withOpacity(0.1),
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Humidity',
-                            style: AppColorPalette2.textstyleTiltle),
-                        const SizedBox(
-                          height: 6,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              '$humidity ',
-                              style: AppColorPalette2.textstyleInfo,
-                            ),
-                            Text(
-                              '%',
-                              style: AppColorPalette2.textstyleTiltle,
-                            ),
-                          ],
-                        ),
-                      ],
-                    )
-                  ],
+                Container(
+                  height: 100,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                  // decoration: BoxDecoration(
+                  //   color: AppColorPalette2.primarcolor.withOpacity(0.2),
+                  //   borderRadius: const BorderRadius.all(
+                  //     Radius.circular(20),
+                  //   ),
+                  // ),
+                  // ignore: sort_child_properties_last
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        main,
+                        style: AppColorPalette2.textstyleTiltle
+                            .copyWith(fontSize: 40),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                    ],
+                  ),
                 ),
-              )
-            ],
+                Container(
+                  width: 370,
+                  height: 100,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(22)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColorPalette2.preprimarycolor2,
+                        offset: Offset(0, 1),
+                        blurRadius: 30,
+                        spreadRadius: -20,
+                      ),
+                    ],
+                    gradient: LinearGradient(
+                        colors: [
+                          AppColorPalette2.secondarycolor,
+                          AppColorPalette2.preprimarycolor2,
+                          AppColorPalette2.preprimarycolor2,
+                          AppColorPalette2.primarcolor
+                          //add more colors for gradient
+                        ],
+                        begin: Alignment.topLeft, //begin of the gradient color
+                        end: Alignment.bottomRight, //end of the gradient color
+                        stops: [0, 0.4, 0.6, 0.8] //stops for individual color
+                        //set the stops number equal to numbers of color
+                        ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Wind', style: AppColorPalette2.textstyleTiltle),
+                          const SizedBox(
+                            height: 6,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                '$speed ',
+                                style: AppColorPalette2.textstyleInfo,
+                              ),
+                              Text(
+                                'Km/h',
+                                style: AppColorPalette2.textstyleTiltle,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      VerticalDivider(
+                        width: 20,
+                        thickness: 1,
+                        indent: 20,
+                        endIndent: 20,
+                        color: Colors.white.withOpacity(0.1),
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Temp', style: AppColorPalette2.textstyleTiltle),
+                          const SizedBox(
+                            height: 6,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                temp_c.toStringAsFixed(2),
+                                style: AppColorPalette2.textstyleInfo,
+                              ),
+                              const BoxedIcon(WeatherIcons.celsius,
+                                  color: Colors.white, size: 25),
+                            ],
+                          ),
+                        ],
+                      ),
+                      VerticalDivider(
+                        width: 20,
+                        thickness: 1,
+                        indent: 20,
+                        endIndent: 20,
+                        color: Colors.white.withOpacity(0.1),
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Humidity',
+                              style: AppColorPalette2.textstyleTiltle),
+                          const SizedBox(
+                            height: 6,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                '$humidity ',
+                                style: AppColorPalette2.textstyleInfo,
+                              ),
+                              Text(
+                                '%',
+                                style: AppColorPalette2.textstyleTiltle,
+                              ),
+                            ],
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
