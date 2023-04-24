@@ -21,6 +21,9 @@ class WeatherScreen extends StatefulWidget {
   State<WeatherScreen> createState() => _WeatherScreenState();
 }
 
+// TODO: make the app responsive
+// TODO: adjust the icon of the weather.
+
 class _WeatherScreenState extends State<WeatherScreen> {
   // final List<Locale> systemLocales = WidgetsBinding.instance.window.locales;
   // String? isoCountryCode = systemLocales.first.countryCode;
@@ -112,9 +115,16 @@ class _WeatherScreenState extends State<WeatherScreen> {
         backgroundColor: AppColorPalette2.backgroundcolor,
         body: SingleChildScrollView(
           child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
+                  width: MediaQuery.of(context).size.width * 0.95,
+                  height: MediaQuery.of(context).size.height * 0.1,
                   decoration: BoxDecoration(
                     color: AppColorPalette2.preprimarycolor2.withOpacity(0.1),
                     borderRadius: const BorderRadius.all(
@@ -123,8 +133,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   ),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                  // margin:
+                  //     const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
                   child: Row(
                     children: [
                       Expanded(
@@ -164,11 +174,12 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   ),
                 ),
                 Container(
-                  height: 100,
+                  width: MediaQuery.of(context).size.width * 0.95,
+                  height: MediaQuery.of(context).size.height * 0.2,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
+                  // margin:
+                  //     const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
                   // decoration: BoxDecoration(
                   //   color: AppColorPalette2.preprimarycolor2.withOpacity(0.1),
                   //   borderRadius: const BorderRadius.all(
@@ -211,11 +222,12 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   ),
                 ),
                 Container(
-                  height: 140,
+                  width: MediaQuery.of(context).size.width * 0.95,
+                  height: MediaQuery.of(context).size.height * 0.25,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                  // margin:
+                  //     const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
                   decoration: BoxDecoration(
                     color: AppColorPalette2.preprimarycolor2.withOpacity(0.1),
                     borderRadius: const BorderRadius.all(
@@ -238,13 +250,13 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                 style: AppColorPalette2.textstyleInfo,
                               ),
                               const BoxedIcon(WeatherIcons.celsius,
-                                  color: Colors.white, size: 25),
+                                  color: Colors.white, size: 35),
                             ],
                           ),
                           Text(
                             'Feels Like ' + feel.toStringAsFixed(2),
                             style: AppColorPalette2.textstyleTiltle.copyWith(
-                                fontWeight: FontWeight.w100, fontSize: 15),
+                                fontWeight: FontWeight.w100, fontSize: 20),
                           ),
                         ],
                       ),
@@ -253,17 +265,20 @@ class _WeatherScreenState extends State<WeatherScreen> {
                       //   color: Colors.white,
                       //   size: 70,
                       // ),
-                      const BoxedIcon(WeatherIcons.sunrise,
-                          color: Colors.white, size: 70),
+                      BoxedIcon(
+                          AppContants.weatherIcons[main] ?? WeatherIcons.alien,
+                          color: Colors.white,
+                          size: 80),
                     ],
                   ),
                 ),
                 Container(
-                  height: 100,
+                  width: MediaQuery.of(context).size.width * 0.95,
+                  height: MediaQuery.of(context).size.height * 0.2,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                  // margin:
+                  //     const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
                   // decoration: BoxDecoration(
                   //   color: AppColorPalette2.primarcolor.withOpacity(0.2),
                   //   borderRadius: const BorderRadius.all(
@@ -287,8 +302,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   ),
                 ),
                 Container(
-                  width: 370,
-                  height: 100,
+                  width: MediaQuery.of(context).size.width * 0.95,
+                  height: MediaQuery.of(context).size.height * 0.15,
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(22)),
                     boxShadow: [

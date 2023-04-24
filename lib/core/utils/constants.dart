@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:weather_icons/weather_icons.dart';
 
 class AppContants {
   // make a static const bec, this is gonna be constant through the whole project
   static const String baseUrl = 'https://api.openweathermap.org/data/2.5';
   static const String appKey = '420c315d900f03bb39f46bcf403631f5';
+
+  static Map<String, IconData> weatherIcons = {
+    'Clouds': WeatherIcons.cloudy,
+    'Clear': WeatherIcons.sunset,
+    'Rain': WeatherIcons.rain,
+    'Snow': WeatherIcons.snowflake_cold,
+    'Stormy': WeatherIcons.storm_showers,
+    'Sunny': WeatherIcons.day_sunny,
+    'Fog': WeatherIcons.day_fog,
+    'Thunder': WeatherIcons.lightning
+  };
 }
 
 class AppColorPalette {
