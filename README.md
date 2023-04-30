@@ -1,16 +1,22 @@
-# weather
+# Weather app
 
-A new Flutter project.
+## Short Description:
+An application for viewing the weather in your Country.
 
-## Getting Started
+## App Review
+<img src="https://user-images.githubusercontent.com/129562097/235374636-00014145-2ef8-415e-baf1-fcebfc03cf5c.gif" width="250">
 
-This project is a starting point for a Flutter application.
+## App Architecture
+- The app is built using the **clean architecture** style, as it is divides into 3 layers [Data, Domain, Presentation]
 
-A few resources to get you started if this is your first Flutter project:
+![Screenshot 2023-04-30 223010](https://user-images.githubusercontent.com/129562097/235375174-0d542aef-f5c9-4b20-8794-e3de8c8edc61.png)
+- The app uses **SOLID** software design principles like [Dependency Inversion].
+- The app implementation is based on the basic **OOP** principles.
+## Features
+- Automatically acquire user current location.
+- Searchable location.
+- Scalable.
+- Performance friendly.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+##  API References
+This project used the following API to get it's data from: ( https://api.openweathermap.org )
